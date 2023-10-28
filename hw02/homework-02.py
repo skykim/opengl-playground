@@ -59,7 +59,7 @@ def display():
                 alpha, beta, gamma, draw_flag = sanity_check(point_A, point_B, point_C, point_P)
                 
                 if draw_flag == True: # If the point is inside a triangle, fills the color with alpha, beta, and gamma values
-                    rgb = (alpha * (Color_A[0] + Color_B[0] + Color_C[0]), beta * (Color_A[1] + Color_B[1] + Color_C[1]), gamma * (Color_A[2] + Color_B[2] + Color_C[2]))
+                    rgb = (alpha * Color_A[0] + beta * Color_B[0] + gamma * Color_C[0], alpha * Color_A[1] + beta * Color_B[1] + gamma * Color_C[1], alpha * Color_A[2] + beta * Color_B[2] + gamma * Color_C[2])
                     glPoints(px, py, rgb)
 
 def glPoints(x, y, color):
