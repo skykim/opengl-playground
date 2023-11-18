@@ -28,3 +28,22 @@
 5. Be sure to use dot product and cross product for the calculation.
 6. Based on the calculation result, the inside pixels are painted with the interpolated color of the vertex, and the outside pixels are assigned black.
 7. Each pixel must be drawn using the glPoints() function, not glPolygons(), glTriangles(), etc.
+
+### HW03
+
+[![Video Label](http://img.youtube.com/vi/3LYIjyYsTRM/0.jpg)](https://youtu.be/3LYIjyYsTRM)
+
+Write an OpenGL program to load the attached OBJ data file and create a carousel.
+
+1. Press the down key on the keyboard to perform the corresponding motion.
+- l : local motion (local motion)
+- g : Global Motion * The default rotor object for Global Motion is Athena.obj.
+- r: relative motion
+
+2. Pressing the down key on the keyboard will perform the function immediately.
+- w: wireframe
+- p: polygon
+- i: initialization
+- q: quit
+
+3. Use the attached OBJ graphical models (Athena.obj Bunny.obj Dragon.obj) to test your program.
