@@ -31,7 +31,7 @@
 
 ### HW03
 
-[![Video Label](http://img.youtube.com/vi/3LYIjyYsTRM/0.jpg)](https://youtu.be/3LYIjyYsTRM)
+[![Video Label](http://img.youtube.com/vi/czDy6UASrjE/0.jpg)](https://youtu.be/czDy6UASrjE)
 
 Write an OpenGL program to load the attached OBJ data file and create a carousel.
 
