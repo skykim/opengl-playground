@@ -4,8 +4,7 @@ import OpenGL.GL as gl
 import numpy as np
 
 WINDOW_SIZE = 768
-OBJ_SCALING_SIZE = 0.25
-OBJ_AXIS_SIZE = 1/OBJ_SCALING_SIZE
+CAMERA_AXIS_SIZE = 3
 ROTATION_DEG_INCREMENT = 0.5
 
 enable_local_motion = True
@@ -38,10 +37,10 @@ def load_obj(filename):
                 vertices.append(list(map(float, line.strip().split()[1:])))
             elif line.startswith('vn '):  # vertex normal
                 normals.append(list(map(float, line.strip().split()[1:])))
-            elif line.startswith('f'):  # face
+            elif line.startswith('f '):  # face
                 face = line.strip().split()[1:]
                 for vertex in face:
-                    v_idx, _, n_idx = (map(int, vertex.replace('//', '/').split('/')))                    
+                    v_idx, _, n_idx = (map(int, vertex.replace('//', '/').split('/')))
                     vert_data.extend(vertices[v_idx-1]) # index starts from 1
                     vert_data.extend(normals[n_idx-1]) # index starts from 1
     
@@ -83,28 +82,26 @@ def main():
     
     gl.glEnable(gl.GL_LIGHTING)
     gl.glEnable(gl.GL_LIGHT0)
-    gl.glLightfv(gl.GL_LIGHT0, gl.GL_POSITION, [0, 1, 1, 0])
-    gl.glLightfv(gl.GL_LIGHT0, gl.GL_AMBIENT, [0.2, 0.2, 0.2, 1.0])
+    gl.glLightfv(gl.GL_LIGHT0, gl.GL_POSITION, [1, 1, 1, 0])
+    gl.glLightfv(gl.GL_LIGHT0, gl.GL_AMBIENT, [0.4, 0.4, 0.4, 1.0])
     gl.glLightfv(gl.GL_LIGHT0, gl.GL_DIFFUSE, [0.5, 0.5, 0.5, 1.0])
     gl.glLightfv(gl.GL_LIGHT0, gl.GL_SPECULAR, [1.0, 1.0, 1.0, 1.0])
     
-    gl.glEnable(gl.GL_CULL_FACE)
-    gl.glCullFace(gl.GL_BACK)
-    
-    #global_vbo, global_count
-    #local_vbo, local_vbo
-    
+    gl.glEnable(gl.GL_DEPTH_TEST)
+   
     gl.glPolygonMode(gl.GL_FRONT_AND_BACK, gl.GL_FILL) #default is FILL mode    
         
     # open window and draw
     while not glfw.window_should_close(window): 
         glfw.poll_events()
         
-        gl.glClear(gl.GL_COLOR_BUFFER_BIT)
-        
-        gl.glMatrixMode(gl.GL_MODELVIEW)        
+        gl.glMatrixMode(gl.GL_PROJECTION)
         gl.glLoadIdentity()
-        gl.glScalef(OBJ_SCALING_SIZE, OBJ_SCALING_SIZE, OBJ_SCALING_SIZE)
+        gl.glOrtho(-CAMERA_AXIS_SIZE, CAMERA_AXIS_SIZE, -CAMERA_AXIS_SIZE, CAMERA_AXIS_SIZE, -CAMERA_AXIS_SIZE, CAMERA_AXIS_SIZE)
+        gl.glMatrixMode(gl.GL_MODELVIEW)
+
+        gl.glClear(gl.GL_COLOR_BUFFER_BIT | gl.GL_DEPTH_BUFFER_BIT)
+        gl.glLoadIdentity()
 
         # carousel
         gl.glPushMatrix()
@@ -112,31 +109,29 @@ def main():
         
         #global: athena
         gl.glPushMatrix()
-        gl.glTranslatef(-OBJ_AXIS_SIZE/2, OBJ_AXIS_SIZE/2, 0)
+        gl.glTranslatef(-CAMERA_AXIS_SIZE/2, CAMERA_AXIS_SIZE/2, 0)
+        gl.glRotatef(-carousel_rotation_deg, 0, 0, 1)
         gl.glRotatef(global_rotation_deg, 0, 0, 1)
         display_object(athena_vbo, athena_count, (1,1,1))
         gl.glPopMatrix()
         
         #local1: bunny
         gl.glPushMatrix()
-        gl.glTranslatef(OBJ_AXIS_SIZE/2, OBJ_AXIS_SIZE/2, 0)
-        gl.glRotatef(-carousel_rotation_deg, 0, 0, 1)
+        gl.glTranslatef(CAMERA_AXIS_SIZE/2, CAMERA_AXIS_SIZE/2, 0)
         gl.glRotatef(local_rotation_deg, 0, 0, 1)
         display_object(bunny_vbo, bunny_count, (1,0,0))
         gl.glPopMatrix()        
         
         #local2: bunny
         gl.glPushMatrix()    
-        gl.glTranslatef(OBJ_AXIS_SIZE/2, -OBJ_AXIS_SIZE/2, 0)
-        gl.glRotatef(-carousel_rotation_deg, 0, 0, 1)
+        gl.glTranslatef(CAMERA_AXIS_SIZE/2, -CAMERA_AXIS_SIZE/2, 0)
         gl.glRotatef(local_rotation_deg, 0, 0, 1)    
         display_object(bunny_vbo, bunny_count, (0,1,0))
         gl.glPopMatrix()
 
         #local3: bunny
         gl.glPushMatrix()    
-        gl.glTranslatef(-OBJ_AXIS_SIZE/2, -OBJ_AXIS_SIZE/2, 0)
-        gl.glRotatef(-carousel_rotation_deg, 0, 0, 1)
+        gl.glTranslatef(-CAMERA_AXIS_SIZE/2, -CAMERA_AXIS_SIZE/2, 0)
         gl.glRotatef(local_rotation_deg, 0, 0, 1)
         display_object(bunny_vbo, bunny_count, (0,0,1))
         gl.glPopMatrix()
